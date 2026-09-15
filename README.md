@@ -31,7 +31,7 @@ A fixed-step explicit method therefore cannot complete the integration
 at any single step size.
 
 Switching to an adaptive implicit solver resolves the ignition event in
-around 2,500 function evaluations, against the ~10⁸ a fixed 10 µs step
+around 1,250 function evaluations, against the ~10⁸ a fixed 10 µs step
 would need. Nitrogen and hydrogen atom balances are conserved to solver
 tolerance.
 
@@ -42,7 +42,7 @@ Requires [uv](https://docs.astral.sh/uv/).
 ```bash
 git clone https://github.com/aayanamalik/Reaction-Kinetics-Simulator
 cd Reaction-Kinetics-Simulator
-uv run src/kinetics/main.py
+uv run src/simulator.py
 ```
 
 ## Limitations
@@ -52,3 +52,7 @@ uv run src/kinetics/main.py
   so the implied equilibrium constant is not thermodynamically
   consistent with ΔH and ΔS
 - The model assumes reaction conditions are isobaric
+
+## Results
+
+With a 650 K jacket, UA = 10 W/K gives smooth operation peaking at 671 K. Reducing cooling to UA = 2 W/K causes thermal runaway to 1147 K after 175 seconds. A change in a single paramater nearly doubles peak temperature.
