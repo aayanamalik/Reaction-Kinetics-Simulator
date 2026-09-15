@@ -4,6 +4,8 @@ Python models of chemical reaction kinetics, from analytically solvable
 first-order decay through to a non-isothermal equilibrium system that
 requires implicit integration.
 
+![Haber process ignition](docs/haber.png)
+
 ## Models
 
 | # | Model | Method |
@@ -38,8 +40,8 @@ tolerance.
 Requires [uv](https://docs.astral.sh/uv/).
 
 ```bash
-git clone https://github.com/<you>/Reaction-Kinetics-Simulator
-cd reaction-kinetics-simulator
+git clone https://github.com/aayanamalik/Reaction-Kinetics-Simulator
+cd Reaction-Kinetics-Simulator
 uv run src/kinetics/main.py
 ```
 
