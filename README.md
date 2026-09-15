@@ -1,8 +1,6 @@
 # Reaction Kinetics Simulator
 
-Python models of chemical reaction kinetics, from analytically solvable
-first-order decay through to a non-isothermal equilibrium system that
-requires implicit integration.
+Python models of chemical reaction kinetics, from analytically solvable first-order decay through to a non-isothermal equilibrium system that requires implicit integration.
 
 ![Haber process ignition](docs/haber.png)
 
@@ -19,21 +17,11 @@ requires implicit integration.
 | 7 | Haber process, non-isothermal | SciPy Radau (implicit) |
 
 ## Why two solvers for the Haber process
+Coupling the Arrhenius equation to an energy balance makes the system stiff. Heat release raises the temperature, which raises the rate constant exponentially, which raises heat release further.
 
-Coupling the Arrhenius equation to an energy balance makes the system
-stiff. Heat release raises the temperature, which raises the rate
-constant exponentially, which raises heat release further.
+The Jacobian eigenvalue that limits explicit stability scales as Ea/(RT²) × dT/dt, so the maximum stable timestep collapses as the reactor heats: ~1.5 s at 700 K, 0.04 s at 900 K, 0.002 s at 1200 K. A fixed-step explicit method therefore cannot complete the integration at any single step size.
 
-The Jacobian eigenvalue that limits explicit stability scales as
-Ea/(RT²) × dT/dt, so the maximum stable timestep collapses as the
-reactor heats: ~1.5 s at 700 K, 0.04 s at 900 K, 0.002 s at 1200 K.
-A fixed-step explicit method therefore cannot complete the integration
-at any single step size.
-
-Switching to an adaptive implicit solver resolves the ignition event in
-around 1,250 function evaluations, against the ~10⁸ a fixed 10 µs step
-would need. Nitrogen and hydrogen atom balances are conserved to solver
-tolerance.
+Switching to an adaptive implicit solver resolves the ignition event in around 1,250 function evaluations, against the ~10⁸ a fixed 10 µs step would need. Nitrogen and hydrogen atom balances are conserved to solver tolerance.
 
 ## Running
 
@@ -55,4 +43,4 @@ uv run src/simulator.py
 
 ## Results
 
-With a 650 K jacket, UA = 10 W/K gives smooth operation peaking at 671 K. Reducing cooling to UA = 2 W/K causes thermal runaway to 1147 K after 175 seconds. A change in a single paramater nearly doubles peak temperature.
+With a 650 K jacket, UA = 10 W/K gives smooth operation peaking at 671 K. Reducing cooling to UA = 2 W/K causes thermal runaway to 1147 K after 175 seconds. The temperature excess over the jacket grows from 21 K to 497 K. The same reactor. one parameter apart.
