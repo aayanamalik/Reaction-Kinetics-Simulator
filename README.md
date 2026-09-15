@@ -19,7 +19,7 @@ Python models of chemical reaction kinetics, from analytically solvable first-or
 ## Why two solvers for the Haber process
 Coupling the Arrhenius equation to an energy balance makes the system stiff. Heat release raises the temperature, which raises the rate constant exponentially, which raises heat release further.
 
-The Jacobian eigenvalue that limits explicit stability scales as Ea/(RT²) × dT/dt, so the maximum stable timestep collapses as the reactor heats: ~1.5 s at 700 K, 0.04 s at 900 K, 0.002 s at 1200 K. A fixed-step explicit method therefore cannot complete the integration at any single step size.
+The reaction rate depends exponentially on temperature, so the sensitivity of the energy balance to temperature (the dominant Jacobian entry, scaling as Ea/RT²) grows as the reactor heats. Since an explicit method's stable timestep is inversely proportional to that sensitivity, the limit collapses from ~1.5 s at 700 K to 0.002 s at 1200 K, so incredibly small fixed steps (>0.001 s) are required to complete the integration.
 
 Switching to an adaptive implicit solver resolves the ignition event in around 1,250 function evaluations, against the ~10⁸ a fixed 10 µs step would need. Nitrogen and hydrogen atom balances are conserved to solver tolerance.
 
