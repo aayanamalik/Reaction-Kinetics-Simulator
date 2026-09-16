@@ -32,6 +32,9 @@ rate constants exponentially, and higher rate constants raise heat release furth
 ### Default parameters
 
 ```python
+# Simulation
+end_time = 20                # s
+
 # Chemistry
 A0, B0, C0 = 1.0, 3.0, 0.0   # initial N2, H2, NH3 (mol dm^-3)
 T0 = 450                     # initial temperature (K)
@@ -49,7 +52,6 @@ density = 60.0               # kg/m3, constant
 volume  = 1                  # dm3
 surroundings_temp = 750      # K, jacket
 UA = 5000.0                  # W/K
-end_time = 100               # s
 ```
 
 These values are chosen to make the system stiff, not fitted to plant data. See
@@ -67,13 +69,12 @@ Measured against that prediction:
 | Solver | Steps | Function evals | Result |
 |--------|------:|---------------:|--------|
 | Heun, dt = 5 × 10⁻³ | — | — | diverges at t = 0.025 s |
-| Heun, dt = 5 × 10⁻⁴ | — | — | diverges at t = 0.024 s |
-| Heun, dt = 2 × 10⁻⁴ | 500,000 | 1,000,000 | completes |
-| RK45 (explicit, adaptive) | — | 9,374 | completes |
-| Radau (implicit, adaptive) | 253 | 1,979 | completes |
+| Heun, dt = 4.5 × 10⁻⁴ | — | — | diverges at t = 0.024 s |
+| Heun, dt = 4 × 10⁻⁴ (largest stable) | 50,000 | 100,000 | completes |
+| RK45 (explicit, adaptive) | 327 | 2,318 | completes |
+| Radau (implicit, adaptive) | 233 | 1,833 | completes |
 
-Radau needs about 250× fewer steps than the smallest working fixed step. The comparison with RK45 separates the
-two effects: adaptivity alone accounts for most of the saving, and implicitness saves a further factor of 4.7. The Heun's implementation used has a fixed timestep and therefore requires a huge number of calculations to complete successfully.
+Radau needs about 215× fewer steps and 55× fewer function evaluations than the largest stable fixed step. The comparison with RK45 separates the two effects: adaptivity accounts for nearly all of the saving, since both adaptive methods take a few hundred steps, and implicitness adds a further 1.26×. That margin is small here because the run is dominated by a single fast transient rather than a long stable tail — shorten the window to 0.5 s and RK45 becomes the cheaper of the two.
 
 ## Results
 
