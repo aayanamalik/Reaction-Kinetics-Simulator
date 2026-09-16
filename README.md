@@ -61,7 +61,7 @@ These values are chosen to make the system stiff, not fitted to plant data. See
 
 Under the defaults above the reactor ignites at t ≈ 0.024 s, spiking to 1279 K before
 the jacket pulls it back to 750 K. The whole event lasts a few hundredths of a second
-inside a 0.5 second integration, and that mismatch is what breaks fixed-step explicit
+over a 20-second integration, and that mismatch is what breaks fixed-step explicit
 integration.
 
 Measured against that prediction:
