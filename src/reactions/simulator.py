@@ -233,7 +233,7 @@ def haber_process_explicit():
     # Time constants
     start_time = 0  # s
     delta_time = 0.0001  # s
-    end_time = 0.5 # s
+    end_time = 20 # s
     iterations = int(end_time / delta_time) # Iterations calculated so for loop can be used (more efficient)
     
     # Chemistry constants
@@ -337,8 +337,8 @@ def haber_process_explicit():
 
 def haber_process_implicit():
 
-    start_time = 0 # seconds
-    end_time   = 0.5 # seconds
+    start_time = 0  # seconds
+    end_time   = 20 # seconds
 
     # Chemistry constants
     A0 = 1  # initial N2 mol
