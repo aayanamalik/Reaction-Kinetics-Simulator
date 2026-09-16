@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from time import time
 from scipy.integrate import solve_ivp
 
 # Constants
@@ -233,18 +232,18 @@ def haber_process_explicit():
     
     # Time constants
     start_time = 0  # s
-    delta_time = 0.01  # s
-    end_time = 50000 # s
+    delta_time = 0.0001  # s
+    end_time = 0.5 # s
     iterations = int(end_time / delta_time) # Iterations calculated so for loop can be used (more efficient)
     
     # Chemistry constants
-    A0 = 1  # N2 mol
-    B0 = 3  # H2 mol
-    C0 = 0  # NH3 mol
+    A0 = 1  # initial N2 mol
+    B0 = 3  # initial H2 mol
+    C0 = 0  # initial NH3 mol
     T0 = 450 # Starting temperature in K
     forward_Ea = 110000 # J/mol assuming iron catalyst
     reverse_Ea = 180000 # J/mol assuming iron catalyst
-    A_factor = 5e4 # Pre-exponential factor
+    A_factor = 5e8 # Pre-exponential factor
     reactant_orders = [1,3,0] # Exponential powers for the rate equation: [N2]^1, [H2]^3
     product_orders = [0,0,2]  # [NH3]^2
     coeffs = [-1,-3,2] # 1 N2 molecule lost, 3 H2 molecules lost, and 2 NH3 molecules gained per unit of the reaction
@@ -255,8 +254,8 @@ def haber_process_explicit():
     Cp = 2000 # J/kg/C Specific heat capacity (currently a constant)
     density = 60.0 # kg/m3 (currently a constant)
     volume = 1 # dm3
-    surroundings_temp = 300 # K
-    UA = 1.0 # W/K
+    surroundings_temp = 750 # K
+    UA = 5000.0 # W/K
     
     # Data storage
     time_values = []
@@ -339,16 +338,16 @@ def haber_process_explicit():
 def haber_process_implicit():
 
     start_time = 0 # seconds
-    end_time   = 400 # seconds
+    end_time   = 0.5 # seconds
 
     # Chemistry constants
-    A0 = 1  # N2 mol
-    B0 = 3  # H2 mol
-    C0 = 0  # NH3 mol
-    T0 = 450 # Starting temperature in K
+    A0 = 1  # initial N2 mol
+    B0 = 3  # initial H2 mol
+    C0 = 0  # initial NH3 mol
+    T0 = 600 # Starting temperature in K
     forward_Ea = 110000 # J/mol assuming iron catalyst
     reverse_Ea = 180000 # J/mol assuming iron catalyst
-    A_factor = 5e4 # Pre-exponential factor
+    A_factor = 5e8 # Pre-exponential factor
     reactant_orders = [1,3,0] # Exponential powers for the rate equation: [N2]^1, [H2]^3
     product_orders = [0,0,2]  # [NH3]^2
     coeffs = [-1,-3,2] # 1 N2 molecule lost, 3 H2 molecules lost, and 2 NH3 molecules gained per unit of the reaction
@@ -359,8 +358,8 @@ def haber_process_implicit():
     Cp = 2000 # J/kg/C Specific heat capacity (currently a constant)
     density = 60.0 # kg/m3 (currently a constant)
     volume = 1 # dm3
-    surroundings_temp = 650 # K
-    UA = 2.0 # W/K
+    surroundings_temp = 750 # K
+    UA = 5000.0 # W/K
 
     def rhs(t, y):
         concs, T = y[0:3], y[3] # y = [N2, H2, NH3, T]
@@ -388,6 +387,8 @@ def haber_process_implicit():
         rtol=1e-6,                       # relative tolerance
         atol=[1e-9, 1e-9, 1e-9, 1e-6]    # absolute tolerance (backup for rtol)
     )
+
+    # sol.y is an array with 4 rows for each of A's, B's, and C's concentrations over time.
 
     time_values      = sol.t
     A_conc_over_time = sol.y[0]
@@ -435,25 +436,24 @@ def menu():
 
     start = True
 
-    if start:
+    while start:
         print("1: Simple Reaction")
         print("2: K-value Comparison")
         print("3: Temperature Comparison")
         print("4: Consecutive Reaction")
         print("5: Equilibria")
-        print("6: Non-Isothermal Equilibria (Implicit)")
-        print("7: Non-Isothermal Equilibria (Explicit)")
+        print("6: Non-Isothermal Equilibria (Explicit)")
+        print("7: Non-Isothermal Equilibria (Implicit)")
         print("0: Exit")
     
         choice = input("Enter: ")
     
         if choice in menu_options:
-            
             menu_options[choice]()
             
         elif choice == '0':
             print("Program exited!")
-            # break
+            break
         else:
             print("Please enter a valid option.")
 
